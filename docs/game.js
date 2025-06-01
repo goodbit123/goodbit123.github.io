@@ -9,11 +9,11 @@ playerImg.src = "player.png"; // Replace this with your own image if desired
 const player = {
   x: 50,
   y: 300,
-  width: 40,
-  height: 40,
+  width: 86,
+  height: 86,
   vx: 0,
   vy: 0,
-  speed: 3,
+  speed: 4,
   jumpPower: -8,
   onGround: false
 };
