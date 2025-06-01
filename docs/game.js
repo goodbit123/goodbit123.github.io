@@ -1,17 +1,18 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// UI: Add level counter under the title
-const levelCounter = document.createElement("h3");
-levelCounter.style.color = "white";
-levelCounter.innerText = "Level: 1";
-document.body.insertBefore(levelCounter, canvas.nextSibling);
-
-// Load player image
 const playerImg = new Image();
-playerImg.src = "player.jpg"; // Replace with your custom image if needed
+playerImg.src = "player.jpg"; // <-- your JPG file here
 
-// Game state
+let gameStarted = false;
+let bullets = [];
+let enemies = [];
+let platforms = [];
+let currentLevel = 0;
+
+const gravity = 0.4;
+const keys = {};
+
 const player = {
   x: 50,
   y: 300,
@@ -21,72 +22,75 @@ const player = {
   vy: 0,
   speed: 3,
   jumpPower: -8,
-  onGround: false
+  onGround: false,
 };
 
-const gravity = 0.4;
-const keys = {};
+document.addEventListener("keydown", (e) => keys[e.key] = true);
+document.addEventListener("keyup", (e) => {
+  keys[e.key] = false;
+  if (e.key === " ") shoot();
+});
 
-let currentLevel = 0;
-const totalLevels = 15;
-let platforms = [];
+function generateLevel() {
+  const newPlatforms = [];
 
-document.addEventListener("keydown", e => keys[e.key] = true);
-document.addEventListener("keyup", e => keys[e.key] = false);
+  newPlatforms.push({ x: 0, y: 350, width: 800, height: 50 });
 
-// Generate platforms for each level
-function generateLevel(levelNum) {
-  const generatedPlatforms = [];
-
-  // Base floor
-  generatedPlatforms.push({ x: 0, y: 350, width: 800, height: 50 });
-
-  // Add 4-6 random platforms per level
-  const count = 4 + Math.floor(Math.random() * 3);
-
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < 5; i++) {
     const plat = {
-      x: Math.random() * 700 + 20,
+      x: Math.random() * 700,
       y: Math.random() * 250 + 50,
-      width: 60 + Math.random() * 100,
+      width: 80 + Math.random() * 60,
       height: 10
     };
-    generatedPlatforms.push(plat);
+    newPlatforms.push(plat);
   }
 
-  return generatedPlatforms;
+  platforms = newPlatforms;
+  enemies = [];
+
+  // Add 3 enemies on random platforms
+  for (let i = 1; i < 4; i++) {
+    const plat = platforms[i];
+    enemies.push({
+      x: plat.x + 10,
+      y: plat.y - 30,
+      width: 30,
+      height: 30,
+      vx: 1.5 * (Math.random() > 0.5 ? 1 : -1)
+    });
+  }
 }
 
-// Initialize first level
-platforms = generateLevel(currentLevel);
-levelCounter.innerText = `Level: ${currentLevel + 1}`;
+function shoot() {
+  bullets.push({
+    x: player.x + player.width / 2,
+    y: player.y + player.height / 2,
+    vx: 5
+  });
+}
 
 function update() {
-  // Horizontal movement
+  if (!gameStarted) return;
+
   player.vx = 0;
   if (keys["ArrowLeft"]) player.vx = -player.speed;
   if (keys["ArrowRight"]) player.vx = player.speed;
-
-  // Jump
   if (keys["ArrowUp"] && player.onGround) {
     player.vy = player.jumpPower;
     player.onGround = false;
   }
 
-  // Apply gravity
   player.vy += gravity;
-
-  // Move player
   player.x += player.vx;
   player.y += player.vy;
 
-  // Collision detection
   player.onGround = false;
   for (let plat of platforms) {
     if (
       player.x < plat.x + plat.width &&
       player.x + player.width > plat.x &&
-      player.y + player.height < plat.y + 10 &&
+      player.y + player.height <= plat.y + 10 &&
       player.y + player.height + player.vy >= plat.y
     ) {
       player.vy = 0;
@@ -95,43 +99,94 @@ function update() {
     }
   }
 
-  // Stay within bounds horizontally
-  if (player.x < 0) player.x = 0;
-
-  // Detect level complete (reach right edge)
   if (player.x + player.width >= canvas.width) {
-    if (currentLevel < totalLevels - 1) {
-      currentLevel++;
-      platforms = generateLevel(currentLevel);
-      levelCounter.innerText = `Level: ${currentLevel + 1}`;
-      player.x = 0;
-      player.y = 300;
-      player.vx = 0;
-      player.vy = 0;
-    } else {
-      levelCounter.innerText = `🎉 You finished all levels! 🎉`;
-    }
+    player.x = 0;
+    player.y = 300;
+    currentLevel++;
+    generateLevel();
   }
 
-  // Fall reset
   if (player.y > canvas.height) {
     player.x = 0;
     player.y = 300;
     player.vy = 0;
+  }
+
+  // Update bullets
+  bullets.forEach(bullet => bullet.x += bullet.vx);
+  bullets = bullets.filter(b => b.x < canvas.width);
+
+  // Update enemies
+  for (let enemy of enemies) {
+    enemy.x += enemy.vx;
+
+    // Bounce off edges of platforms
+    const plat = platforms.find(p => enemy.y + enemy.height === p.y);
+    if (plat) {
+      if (enemy.x <= plat.x || enemy.x + enemy.width >= plat.x + plat.width) {
+        enemy.vx *= -1;
+      }
+    }
+  }
+
+  // Bullet-enemy collisions
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    for (let j = 0; j < bullets.length; j++) {
+      const b = bullets[j];
+      const e = enemies[i];
+      if (
+        b.x > e.x &&
+        b.x < e.x + e.width &&
+        b.y > e.y &&
+        b.y < e.y + e.height
+      ) {
+        enemies.splice(i, 1);
+        bullets.splice(j, 1);
+        break;
+      }
+    }
   }
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw platforms
+  if (!gameStarted) {
+    ctx.fillStyle = "#111";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.font = "36px Arial";
+    ctx.fillText("Jumpy Rocky", 270, 150);
+    ctx.font = "24px Arial";
+    ctx.fillText("Press ENTER to Start", 260, 200);
+    return;
+  }
+
+  // Platforms
   ctx.fillStyle = "#888";
   for (let plat of platforms) {
     ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
   }
 
-  // Draw player image
+  // Player
   ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+
+  // Enemies
+  ctx.fillStyle = "red";
+  for (let e of enemies) {
+    ctx.fillRect(e.x, e.y, e.width, e.height);
+  }
+
+  // Bullets
+  ctx.fillStyle = "yellow";
+  for (let b of bullets) {
+    ctx.fillRect(b.x, b.y, 5, 3);
+  }
+
+  // Level counter
+  ctx.fillStyle = "white";
+  ctx.font = "18px Arial";
+  ctx.fillText(`Level: ${currentLevel + 1}`, 10, 20);
 }
 
 function gameLoop() {
@@ -140,5 +195,13 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !gameStarted) {
+    gameStarted = true;
+    generateLevel();
+  }
+});
+
 playerImg.onload = gameLoop;
+
 
