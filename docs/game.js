@@ -9,7 +9,7 @@ document.body.insertBefore(levelCounter, canvas.nextSibling);
 
 // Load player image
 const playerImg = new Image();
-playerImg.src = "player.png"; // Replace with your custom image if needed
+playerImg.src = "player.jpg"; // Replace with your custom image if needed
 
 // Game state
 const player = {
