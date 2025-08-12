@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Squid Dash</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Squid Dash</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="start-screen">
-        <h1>Squid Dash</h1>
-        <button id="play-btn">Play</button>
-        <button id="credits-btn">Credits</button>
-        <button id="leaderboard-btn">Leaderboard</button>
-    </div>
+  <!-- Device Selection -->
+  <div id="deviceSelect" class="menu">
+    <h1>Choose Your Device</h1>
+    <button id="selectPC">PC</button>
+    <button id="selectMobile">Mobile</button>
+  </div>
 
+  <!-- Main Menu -->
+  <div id="mainMenu" class="menu hidden">
+    <h1>Squid Dash 🦑</h1>
+    <button id="playBtn">Play</button>
+    <button id="leaderboardBtn">Leaderboard</button>
+    <button id="creditsBtn">Credits</button>
+  </div>
+
+  <!-- Game Canvas -->
+  <div id="gameContainer" class="hidden">
     <canvas id="gameCanvas"></canvas>
-
-    <div id="game-over-screen" style="display:none;">
-        <h2>Game Over</h2>
-        <button id="play-again-btn">Play Again</button>
-        <button id="main-menu-btn">Main Menu</button>
+    <div id="ui">
+      <span id="score">Blocks: 0</span>
+      <span id="cooldown">Dash Ready</span>
     </div>
+  </div>
 
-    <script src="js/game.js"></script>
+  <!-- Game Over Screen -->
+  <div id="gameOver" class="menu hidden">
+    <h2>Game Over</h2>
+    <p id="finalScore"></p>
+    <button id="playAgainBtn">Play Again</button>
+    <button id="returnMenuBtn">Main Menu</button>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>
+
