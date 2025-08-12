@@ -33,3 +33,12 @@ h1{font-size:48px;margin:0}
 
 /* small animations */
 .counter-anim{transition:all 0.45s cubic-bezier(.22,.9,.31,1)}
+
+/* Dimmed/inactive UI */
+.dimmed{opacity:0.45;filter:grayscale(30%);pointer-events:none}
+
+/* Hidden on mobile until after death */
+.mobile-hidden-until-death{display:none}
+
+/* Square-ish platform visuals helper */
+.block-tile{image-rendering:pixelated;}
