@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    background: #0b1d2e;
+    color: white;
+    font-family: sans-serif;
+    text-align: center;
+}
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+canvas {
+    display: block;
+    margin: auto;
+    background: linear-gradient(#0b1d2e, #145374);
+}
