@@ -1,5 +1,26 @@
-let gameState = "chooseDevice"; // other states: "menu", "playing", "gameOver"
-let chosenDevice = null;
+// DOM Elements
+const deviceSelect = document.getElementById("deviceSelect");
+const mainMenu = document.getElementById("mainMenu");
+const gameContainer = document.getElementById("gameContainer");
+const gameOverScreen = document.getElementById("gameOver");
+
+let deviceType = null;
+
+// Device Selection Handlers
+document.getElementById("selectPC").addEventListener("click", () => {
+  deviceType = "pc";
+  deviceSelect.classList.add("hidden");
+  mainMenu.classList.remove("hidden");
+  console.log("PC mode selected");
+});
+
+document.getElementById("selectMobile").addEventListener("click", () => {
+  deviceType = "mobile";
+  deviceSelect.classList.add("hidden");
+  mainMenu.classList.remove("hidden");
+  console.log("Mobile mode selected");
+});
+
 
 // -------------------- Assets (placeholders up top) --------------------
 const ASSETS = {
