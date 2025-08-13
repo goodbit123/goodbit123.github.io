@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <title>Squid Dash</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Device Selection -->
+  <div id="deviceSelect" class="menu">
+    <h1>Choose Your Device</h1>
+    <div>
+      <button id="selectPC" class="primary">💻 PC</button>
+      <button id="selectMobile">📱 Mobile</button>
+    </div>
+    <div class="panel" style="margin-top:8px; font-size:14px; opacity:.9;">
+      Tip: On PC use <b>A/D</b> to move, <b>W/Space</b> to jump, <b>Shift/J</b> to dash.
+    </div>
+  </div>
+
+  <!-- Main Menu -->
+  <div id="mainMenu" class="menu hidden" style="padding-top: 100px;">
+    <h1>Squid Dash 🦑</h1>
+    <button id="playBtn" class="primary">Play</button>
+  </div>
+
+  <!-- Game Canvas -->
+  <div id="gameContainer" class="hidden">
+    <div id="game-title-overlay">Squid Dash 🦑</div>
+    <canvas id="gameCanvas"></canvas>
+    <!-- DOM HUD placeholders if you want to show extra info later -->
+    <div id="ui">
+        <div class="hud-item">
+          <div class="label">Score</div>
+          <div class="value" id="scoreValue">0</div>
+        </div>
+        <div class="hud-item">
+          <div class="label">Blocks</div>
+          <div class="value" id="blocksValue">0</div>
+        </div>
+      </div>
+  </div>
+
+  <div id="keybinds-hint" class="hidden">⌨️ Controls: [A/D] Move | [W/Space] Jump | [Shift/J] Dash</div>
+
+  <!-- Game Over Screen -->
+  <div id="gameOver" class="menu hidden">
+    <h2>Game Over</h2>
+    <div class="score-summary">
+      <p>Score: <span id="finalScoreValue">0</span></p>
+      <p>Blocks: <span id="finalBlocksValue">0</span></p>
+    </div>
+    <div>
+      <button id="playAgainBtn">Play Again</button>
+      <button id="returnMenuBtn">Return to Menu</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
