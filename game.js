@@ -1,5 +1,5 @@
-// game.js
-// Squid Dash — 60 FPS upgrade + polished HUD/FX
+let gameState = "chooseDevice"; // other states: "menu", "playing", "gameOver"
+let chosenDevice = null;
 
 // -------------------- Assets (placeholders up top) --------------------
 const ASSETS = {
