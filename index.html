@@ -1,45 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
   <title>Squid Dash</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- Device Selection -->
   <div id="deviceSelect" class="menu">
     <h1>Choose Your Device</h1>
-    <button id="selectPC">PC</button>
-    <button id="selectMobile">Mobile</button>
+    <div>
+      <button id="selectPC" class="primary">PC</button>
+      <button id="selectMobile">Mobile</button>
+    </div>
+    <div class="panel" style="margin-top:8px; font-size:14px; opacity:.9;">
+      Tip: On PC use <b>A/D</b> to move, <b>W/Space</b> to jump, <b>Shift/J</b> to dash.
+    </div>
   </div>
 
   <!-- Main Menu -->
   <div id="mainMenu" class="menu hidden">
     <h1>Squid Dash 🦑</h1>
-    <button id="playBtn">Play</button>
-    <button id="leaderboardBtn">Leaderboard</button>
-    <button id="creditsBtn">Credits</button>
+    <button id="playBtn" class="primary">Play</button>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+      <button id="leaderboardBtn" onclick="alert('Local leaderboard stored in cookies will appear after your first game!')">Leaderboard</button>
+      <button id="creditsBtn" onclick="alert('Squid Dash prototype — replace this Credits text in HTML!')">Credits</button>
+    </div>
   </div>
 
   <!-- Game Canvas -->
   <div id="gameContainer" class="hidden">
     <canvas id="gameCanvas"></canvas>
-    <div id="ui">
-      <span id="score">Blocks: 0</span>
-      <span id="cooldown">Dash Ready</span>
+    <!-- DOM HUD placeholders if you want to show extra info later -->
+    <div id="ui" aria-hidden="true">
+      <span id="score" style="display:none">Blocks: 0</span>
+      <span id="cooldown" style="display:none">Dash Ready</span>
     </div>
   </div>
 
   <!-- Game Over Screen -->
   <div id="gameOver" class="menu hidden">
     <h2>Game Over</h2>
-    <p id="finalScore"></p>
-    <button id="playAgainBtn">Play Again</button>
-    <button id="returnMenuBtn">Main Menu</button>
+    <p id="finalScore">Score: 0</p>
+    <div>
+      <button id="playAgainBtn" class="primary hidden">Play Again</button>
+      <button id="returnMenuBtn" class="hidden">Main Menu</button>
+    </div>
   </div>
 
   <script src="game.js"></script>
 </body>
 </html>
-
